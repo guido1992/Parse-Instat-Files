@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# ### Once Excel files have been downloaded from Instat, save in a folder and run this Python script to combine multiple Instat files together, edit them, add & rename column headers as well as edit team names. There are a number of libraries that we need to import in order for us to work with the files. These libraries are glob and pandas.
+### Once Excel files have been downloaded from Instat, save in a folder and run this Python script to combine multiple Instat 
+### files together, edit them, add & rename column headers as well as edit team names. There are a number of libraries that we 
+### need to import in order for us to work with the files. These libraries are glob and pandas.
 # 
-# ### Pandas is a library written for the Python programming language for data manipulation and analysis. In particular, it offers data structures and operations for manipulating numerical tables and time series. Use a loop to combine all excel files in the folder into a single file with two sheets: "Teams" and "Players".
-
-# In[99]:
-
+### Pandas is a library written for the Python programming language for data manipulation and analysis. In particular, it offers 
+### data structures and operations for manipulating numerical tables and time series. Use a loop to combine all excel files in 
+### the folder into a single file with two sheets: "Teams" and "Players".
 
 import glob
 import os
@@ -18,12 +19,7 @@ Player = pd.concat(pd.read_excel(f, sheet_name = 'Players') for f in files)
 
 ### (path, "*.xlsx") - refers to all files the the folder where the files are stored.
 
-
-# ### Read Team data frame file in to edit
-
-# In[100]:
-
-
+### Read Team data frame file in to edit
 ### Read in the match data frame
 Team.head()
 
@@ -31,11 +27,7 @@ Team.head()
 Team.drop("Position", inplace=True,axis=1)
 
 
-# ## Create Extra Columns
-
-# In[101]:
-
-
+### Create Extra Columns
 ### Add columns called "Season" & "League"
 
 Team['Season'] = '2018/19'
@@ -48,13 +40,10 @@ Team.dtypes
 Team = Team.astype(str) 
 print(Team.dtypes)
 
-
 # ## Edit Columns with Null values
-# ### A number of columns had Null or "-" values. Replace these values with a zero value. This is done by calling the dataframe data_df1 (Step 1 above) and the specific column (original) and equalling it to the same dataframe and column yet this time the "-" value has been replaced with a "0".
-
-# In[102]:
-
-
+### A number of columns had Null or "-" values. Replace these values with a zero value. This is done by calling the dataframe 
+### Team (Step 1 above) and the specific column (original) and equalling it to the same dataframe and column yet this time 
+### the "-" value has been replaced with a "0".
 ### Where fields have "Null" or "-" then 0 else "field"
 
 Team['Minutes played'] = Team['Minutes played'].replace({'-': '0'})
@@ -88,11 +77,8 @@ Team['InStat Index'] = Team['InStat Index'].replace({'-': '0'})
 
 
 # ## Rename & Create Column Headers
-
-# In[103]:
-
-
 ### Using a dictionary, we rename the columns as follows (old column:new column) with {at the start and end}
+
 Team.rename(columns={'Successful actions, %':'Successful actions%', 'Shots / on target, %': 'SoT%',
                     'Accurate passes, %':'Accurate passes%','Key passes accuracy, %':'Key passes accuracy%',                     
                     'Accurate crosses, %':'Accurate crosses%', 'Challenges won, %':'Challenges won%',
@@ -114,10 +100,6 @@ Team.head()
 
 
 # ## Edit Team Names
-
-# In[104]:
-
-
 ### Eg: Edit team field to change team names as follows: {'name': 'new name'}
 
 Team['Team'] = Team['Team'].replace({'Orlando Pirates Football Club': 'Orlando Pirates', 'Baroka Football Club': 'Baroka FC',
@@ -132,18 +114,10 @@ Team['Team'] = Team['Team'].replace({'Orlando Pirates Football Club': 'Orlando P
 
 # ### Now we read in the Player data frame sheet to edit
 
-# In[1]:
-
-
 ### Overview of Top 5 rows of player sheet
 Player.head()
 
-
 # ## Create Extra Columns
-
-# In[106]:
-
-
 ### Add columns called "Season" & "League"
 
 Player['Season'] = '2018/19'
@@ -157,13 +131,8 @@ Player['Player Name'] = Player['First name'] + " " + Player['Surname']
 ### List all the columns in the worksheet
 Player.dtypes
 
-
 # ## Replace values within a column
-# ### Using a dictionary, edit the values to your requirement. Ie: GK -> Goalkeeper etc...
-
-# In[107]:
-
-
+#### Using a dictionary, edit the values to your requirement. Ie: GK -> Goalkeeper etc...
 ### Replace positions IDs with Position names...change as desired.
 
 Player['Position'] = Player['Position'].replace({'GK': 'Goalkeeper', 'LD': 'Defender', 'CD': 'Defender', 'RD': 'Defender', 
@@ -172,13 +141,10 @@ Player['Position'] = Player['Position'].replace({'GK': 'Goalkeeper', 'LD': 'Defe
                 'AMR': 'Attacking Midfielder', 'F': 'Forward', 'CF': 'Forward'})
 
 
-# ## Edit Columns with Null values
-
-# ### A number of columns had Null or "-" values. Replace these values with a zero value. This is done by calling the dataframe PSL (Step 1 above) and the specific column (original) and equalling it to the same dataframe and column yet this time the "-" value has been replaced with a "0".
-
-# In[108]:
-
-
+### Edit Columns with Null values
+### A number of columns had Null or "-" values. Replace these values with a zero value. This is done by calling the dataframe 
+### Players (Step 1 above) and the specific column (original) and equalling it to the same dataframe and column yet this time the "-" 
+### value has been replaced with a "0".
 ### Where fields have "Null" or "-" then 0 else "field"
 
 Player['Minutes played'] = Player['Minutes played'].replace({'-': '0'})
@@ -212,11 +178,8 @@ Player['InStat Index'] = Player['InStat Index'].replace({'-': '0'})
 
 
 # ## Rename & Create Column Headers
-
-# In[111]:
-
-
 ### Using a dictionary, we rename the columns as follows (old column:new column) with {at the start and end}
+
 Player.rename(columns={'Successful actions, %':'Successful actions%', 
                        'Shots / on target, %': 'SoT%', 'Accurate passes, %':'Accurate passes%',
                        'Key passes accuracy, %':'Key passes accuracy%', 
@@ -240,12 +203,9 @@ Player.head()
 
 
 # ## Filtering Null Values In A Column
-
-# In[113]:
-
-
 ### Unfortunately there may be times when a player has not been assigned a position.
 ### List the values in the "Position" column.
+
 Player.Position.unique()
 
 ### List the value "Null" when it exists in the "Position" column
@@ -267,10 +227,7 @@ Player_Null = Player[~Player.Position.isin(Player_data_list)]
 Player_Null.Position.unique()
 
 
-# ## Per 90
-
-# In[114]:
-
+### Per 90
 
 ### To help our analysis later on, we would like to standardise the metrics across "a game". 
 ### Create a column called "Mins Per 90" ("Minutes Played / 90" - also known as "Games played").
@@ -286,11 +243,7 @@ Player['Mins Per 90']= round(Player['Mins Per 90'],2)
 Player.head()
 
 
-# ## Edit Team Names
-
-# In[115]:
-
-
+### Edit Team Names
 ### Eg: Edit team field to change team names as follows: {'old name': 'new name'}
 
 Player['Team'] = Player['Team'].replace({'Orlando Pirates Football Club': 'Orlando Pirates', 'Baroka Football Club': 'Baroka FC',
@@ -303,24 +256,17 @@ Player['Team'] = Player['Team'].replace({'Orlando Pirates Football Club': 'Orlan
                                 'Golden Arrows Football Club': 'Golden Arrows', 'Black Leopards': 'Black Leopards'})
 
 
-# ### Creating a dictionary with each data frame. Combine data frames into one workbook by naming each as a sheet, ie: 'Team' and 'Players'.
-
-# In[116]:
-
-
 ### Create a dictionary for each data frame. Combine the data frames together into one workbook by naming sheet 1: 
 ### "Teams" and sheet 2: "Players"
+
 PSL = {'Teams':Team, 'Players':Player}
 
-
-# ## Output File
-# ### Write two sheets into workbook as an Excel file. Use a loop to write the dictionary keys and values into the sheet and save the workbook.
-
-# In[117]:
-
-
+### Output File
+### Write two sheets into workbook as an Excel file. Use a loop to write the dictionary keys and values into the sheet and 
+### save the workbook.
 ### Write both sheets into an Excel workbook for further analysis. Use a loop to write all the data together and save the
 ### the workbook.
+
 writer = pd.ExcelWriter('XXXXX.xlsx', engine='xlsxwriter')
  
 for sheet_name in PSL.keys():
@@ -328,10 +274,7 @@ for sheet_name in PSL.keys():
     
 writer.save()
 
-### Excel book created for further analysis needs. Saved to drive. :ie: use search bar
-
-
-# In[ ]:
+### Excel book created for further analysis needs. Saved to drive. :ie: use search bar.
 
 
 
